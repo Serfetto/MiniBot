@@ -22,19 +22,28 @@ public class SpringSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(expressionInterceptUrlRegistry ->
                         expressionInterceptUrlRegistry
-                                .requestMatchers("/registration", "/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/jokes").hasAnyAuthority(UserAuthority.MODERATOR.getAuthority(), UserAuthority.ADMIN.getAuthority())
-                                .requestMatchers(HttpMethod.POST, "/jokes").hasAnyAuthority(UserAuthority.USER.getAuthority(), UserAuthority.MODERATOR.getAuthority(), UserAuthority.ADMIN.getAuthority())
-                                .requestMatchers(HttpMethod.GET, "/jokes/**").hasAnyAuthority(UserAuthority.MODERATOR.getAuthority(), UserAuthority.ADMIN.getAuthority())
-                                .requestMatchers(HttpMethod.POST, "/jokes/**").hasAnyAuthority(UserAuthority.MODERATOR.getAuthority(), UserAuthority.ADMIN.getAuthority())
+                                // Разрешить всем доступ к GET-запросам на указанные эндпоинты
+                                .requestMatchers(HttpMethod.GET, "/jokes").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/jokes/pages/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/jokes/top5").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/jokes/random").permitAll()
+                                // Разрешить всем доступ к POST-запросам на /jokes/like/*
+                                .requestMatchers(HttpMethod.POST, "/jokes/like/**").permitAll()
+                                // Разрешить только модераторам и администраторам доступ к POST, PUT, DELETE запросам на /jokes
+                                .requestMatchers(HttpMethod.POST, "/jokes").hasAnyAuthority(UserAuthority.MODERATOR.getAuthority(), UserAuthority.ADMIN.getAuthority())
                                 .requestMatchers(HttpMethod.PUT, "/jokes/**").hasAnyAuthority(UserAuthority.MODERATOR.getAuthority(), UserAuthority.ADMIN.getAuthority())
                                 .requestMatchers(HttpMethod.DELETE, "/jokes/**").hasAnyAuthority(UserAuthority.MODERATOR.getAuthority(), UserAuthority.ADMIN.getAuthority())
+                                // Разрешить всем доступ к регистрации и логину
+                                .requestMatchers("/registration", "/login").permitAll()
+                                // Все остальные запросы доступны только администратору
                                 .anyRequest().hasAuthority(UserAuthority.ADMIN.getAuthority()))
                 .formLogin(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
+
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){

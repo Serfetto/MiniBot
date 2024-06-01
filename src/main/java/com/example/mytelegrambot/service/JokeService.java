@@ -84,11 +84,11 @@ public class JokeService implements JokeServiceIterface {
         return jokes.findTop5ByOrderByLikesDesc();
     }
 
-    public ResponseEntity<String> likeJoke(Long id, int likes) {
+    public ResponseEntity<String> likeJoke(Long id) {
         Optional<DBJokes> optionalJoke = jokes.findById(id);
         if (optionalJoke.isPresent()) {
             DBJokes joke = optionalJoke.get();
-            joke.setLikes(likes);
+            joke.setLikes(joke.getLikes() + 1);
             jokes.save(joke);
             return ResponseEntity.ok("Нам очень приятно что вы выбрали эту шутку.");
         } else {
@@ -103,7 +103,4 @@ public class JokeService implements JokeServiceIterface {
         return jokes.findAll(pageable);
     }
 
-    public long getNumberid() {
-        return jokes.count();
-    }
 }

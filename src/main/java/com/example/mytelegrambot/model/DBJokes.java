@@ -8,10 +8,10 @@ import java.util.List;
 
 @Setter
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "jokes")
+@ToString
 @Table(name = "jokes")
 public class DBJokes {
     @Id

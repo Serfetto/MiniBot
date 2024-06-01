@@ -2,10 +2,7 @@ package com.example.mytelegrambot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -37,4 +34,5 @@ public class DbJokesHistory {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated")
     private Date updated;
+
 }
