@@ -8,3 +8,5 @@
 
 3) Был подкоректирован SpringSecurityConfiguration. Иногда Spring Security не давал отправлять запрос по адресам
 
+4) Был добавлен Spring Actuator
+
